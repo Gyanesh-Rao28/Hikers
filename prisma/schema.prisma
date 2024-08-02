@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  // provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  HIKER
+  AGENCY_ORGANIZER
+}
+
+enum gender {
+  FEMALE
+  MALE
+  OTHER
+  NONE
+}
+
+model Profile {
+  id           String  @id @unique @default(uuid())
+  uid          String  @unique
+  token        String  @db.LongText
+  name         String?
+  email        String  @unique
+  gender       gender? @default(NONE)
+  imageUrl     String?
+  age          Int?
+  phoneNumber  String?
+  location     String?
+  licenseId    String? @unique
+  licenseImage String?
+  medicalIssue String?
+  verified     Boolean @default(false)
+  role         Role    @default(HIKER)
+
+  request Requests[]
+
+  createdAt DateTime @default(now())
+}
+
+model Agency {
+  id                 String  @id @unique @default(uuid())
+  agencyName         String
+  agencyLocation     String
+  agencyLicenseId    String  @unique
+  agencyLicenseImage String
+  ownerName          String
+  ownerEmail         String  @unique
+  bio                String  @db.Text
+  verified           Boolean @default(false)
+  role               Role    @default(AGENCY_ORGANIZER)
+
+  trips       Trip[]
+  request     Requests[]
+  tripSuccess TripSuccess[]
+
+  createdAt DateTime @default(now())
+}
+
+enum TripType {
+  BIKING
+  TREKKING
+  CAMPING
+  TOURISM
+  ADVENTURE
+}
+
+model Trip {
+  id            String   @id @unique @default(uuid())
+  leaderName    String
+  leaderContact String
+  TripName      String
+  description   String // to be done
+  images        Image[]
+  expense       Float
+  type          TripType @default(TOURISM)
+  location      String
+  duration      Int
+  groupSize     Int
+  lastApplyDate DateTime
+
+  agencyId String
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  request Requests[]
+
+  createdAt DateTime @default(now())
+
+  @@index([agencyId])
+}
+
+model Image {
+  id  String @id @unique @default(uuid())
+  url String
+
+  tripId String
+  trip   Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([tripId])
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Requests {
+  id String @id @unique @default(uuid())
+
+  request RequestStatus @default(PENDING)
+
+  agencyId String
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  tripId String
+  trip   Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([agencyId])
+  @@index([tripId])
+  @@index([profileId])
+}
+
+model TripSuccess {
+  id String @id @unique @default(uuid())
+
+  agencyId String
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  dessription String @db.Text
+  imageUrl    String @db.Text
+
+  @@index([agencyId])
+}
