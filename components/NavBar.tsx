@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MenuIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetTrigger, SheetContent } from "./ui/sheet";
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetDescription, SheetTitle } from "./ui/sheet";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -47,36 +47,37 @@ const NavBar = async () => {
 
           </NavigationMenuList>
         </NavigationMenu>
-
-        {/* <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden">
-              <MenuIcon className="h-6 w-6" />
-            </Button>
+        <Sheet>
+          <SheetTrigger className="p-1 rounded-md transition-colors duration-200 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300">
+            <MenuIcon className="h-6 w-6" />
           </SheetTrigger>
-          <SheetContent side="right" className="bg-slate-300">
-            <div className="grid gap-2 py-6">
-              <Link
-                href="/trips"
-                className="flex w-full items-center p-3 rounded-xl text-lg font-medium hover:bg-blue-100 hover:text-blue-600"
-              >
-                Browse Trips
-              </Link>
-              <Link
-                href="/contact"
-                className="flex w-full items-center p-3 rounded-xl text-lg font-medium hover:bg-blue-100 hover:text-blue-600"
-              >
-                Contact
-              </Link>
-              <Link
-                href="/login"
-                className="flex w-full items-center p-3 rounded-xl text-lg font-medium hover:bg-blue-100 hover:text-blue-600"
-              >
-                Login
-              </Link>
-            </div>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle className="text-xl">Hikers</SheetTitle>
+              <SheetDescription className="grid gap-2 py-6">
+                
+                  <Link
+                    href="/trips"
+                    className="flex w-full items-center p-3 rounded-xl text-lg font-medium hover:bg-blue-100 hover:text-blue-600"
+                  >
+                    Browse Trips
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="flex w-full items-center p-3 rounded-xl text-lg font-medium hover:bg-blue-100 hover:text-blue-600"
+                  >
+                    Contact
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="flex w-full items-center p-3 rounded-xl text-lg font-medium hover:bg-blue-100 hover:text-blue-600"
+                  >
+                    Login
+                  </Link>
+              </SheetDescription>
+            </SheetHeader>
           </SheetContent>
-        </Sheet> */}
+        </Sheet>
 
       </header>
     </nav>
