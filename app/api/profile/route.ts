@@ -1,11 +1,11 @@
 import { db } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
-        const { uid, displayName, email, phoneNumber, imageUrl, token } = await req.json();
+        const { uid, displayName, email, phoneNumber, imageUrl } = await req.json();
 
-        if (!uid || !email || !token) {
+        if (!uid || !email ) {
             return new NextResponse("Fields missing", { status: 400 });
         }
 
@@ -25,8 +25,7 @@ export async function POST(req: Request) {
                 name: displayName,
                 email,
                 phoneNumber,
-                imageUrl,
-                token
+                imageUrl
             }
         });
 

@@ -1,5 +1,5 @@
+// /api/dashboardAccess/[uid]/route.ts
 import { currentProfile } from "@/lib/currentProfile";
-import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest,
@@ -12,22 +12,11 @@ export async function GET(request: NextRequest,
 
     const user = await currentProfile()
 
+    console.log(user?.role)
+
     if (!user) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    try {
-        const admin = await db.profile.findFirst({
-            where: {
-                uid: params.uid,
-                role: "ADMIN",
-            },
-        });
-
-        return NextResponse.json(admin);
-
-    } catch (error) {
-        console.error('Error in /api/admin:', error);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-    }
+    return NextResponse.json(user.role, { status: 200 });
 }

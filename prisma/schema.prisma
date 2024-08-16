@@ -24,7 +24,6 @@ enum gender {
 model Profile {
   id           String  @id @unique @default(uuid())
   uid          String  @unique
-  token        String  @db.Text
   name         String?
   email        String  @unique
   gender       gender? @default(NONE)
@@ -44,16 +43,24 @@ model Profile {
 }
 
 model Agency {
-  id                 String  @id @unique @default(uuid())
-  agencyName         String
-  agencyLocation     String
-  agencyLicenseId    String  @unique
-  agencyLicenseImage String
-  ownerName          String
-  ownerEmail         String  @unique
-  bio                String  @db.Text
-  verified           Boolean @default(false)
-  role               Role    @default(AGENCY_ORGANIZER)
+  id String @id @unique @default(uuid())
+
+  uid          String @unique
+  agencyName   String
+  agencyEmail  String @unique
+  agencyImgUrl String
+
+  agencyUrl          String?
+  agencyPhoneNumber  String?
+  agencyLocation     String?
+
+  agencyLicenseId    String? @unique
+  agencyLicenseFile String?
+  agencyLicenseFileName String?
+
+  bio      String? @db.Text
+  verified Boolean @default(false)
+  role     Role    @default(AGENCY_ORGANIZER)
 
   trips       Trip[]
   request     Requests[]
@@ -75,13 +82,14 @@ model Trip {
   leaderName    String
   leaderContact String
   TripName      String
-  description   String // to be done
+  description   String @db.Text
   images        Image[]
   expense       Float
   type          TripType @default(TOURISM)
   location      String
   duration      Int
   groupSize     Int
+  tripStartDate DateTime
   lastApplyDate DateTime
 
   agencyId String
